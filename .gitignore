@@ -10,3 +10,7 @@ Desktop.ini
 
 # Misc
 *.log
+
+# Archivos sensibles
+github-recovery-codes.txt
+*.crt
