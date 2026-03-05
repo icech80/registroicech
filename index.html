@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro ICECH</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- Header -->
+        <header class="header">
+            <div class="header__overlay"></div>
+            <div class="header__logo">
+                <div class="header__icon">
+                    <span class="material-icons-outlined">church</span>
+                </div>
+                <div class="header__text">
+                    <h1 class="header__title">Iglesia Cristiana Echaurren 80</h1>
+                    <p class="header__subtitle">¡Regístrate y sé parte de nuestra familia!</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Welcome Screen -->
+        <section class="welcome-screen active" id="stepWelcome">
+            <div class="welcome-container">
+                <div class="welcome-logo">
+                    <img src="NEGRO Propuesta colores logo echaurren.png" alt="Logo Iglesia Cristiana Echaurren 80">
+                </div>
+                <h2 class="welcome-title">Bienvenido a la Iglesia de Echaurren</h2>
+                <p class="welcome-message">Registre sus datos y sea parte de nuestra comunidad.</p>
+                <button type="button" class="btn btn--primary btn--large" onclick="startRegistration()">
+                    <span class="material-icons-outlined">edit_note</span>
+                    Registrar
+                </button>
+            </div>
+        </section>
+
+        <!-- Progress Bar -->
+        <div class="progress-container" id="progressContainer" style="display: none;">
+            <div class="progress-bar">
+                <div class="progress-bar__fill" id="progressFill"></div>
+            </div>
+            <div class="progress-steps">
+                <div class="progress-step active" data-step="1">
+                    <div class="progress-step__circle">
+                        <span class="material-icons-outlined">person</span>
+                    </div>
+                    <span class="progress-step__label">Información Personal</span>
+                </div>
+                <div class="progress-step" data-step="2">
+                    <div class="progress-step__circle">
+                        <span class="material-icons-outlined">family_restroom</span>
+                    </div>
+                    <span class="progress-step__label">Contacto y Familia</span>
+                </div>
+                <div class="progress-step" data-step="3">
+                    <div class="progress-step__circle">
+                        <span class="material-icons-outlined">auto_stories</span>
+                    </div>
+                    <span class="progress-step__label">Vida Espiritual</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Container -->
+        <main class="form-container" id="formContainer" style="display: none;">
+            <!-- Botón Salir -->
+            <div class="exit-bar">
+                <button type="button" class="btn btn--exit" onclick="exitRegistration()">
+                    <span class="material-icons-outlined">arrow_back</span>
+                    Salir
+                </button>
+            </div>
+
+            <form id="censoForm" novalidate>
+
+                <!-- Step 1: Información Personal -->
+                <section class="form-step" id="step1">
+                    <div class="form-step__header">
+                        <h2 class="form-step__title">Información Personal</h2>
+                        <p class="form-step__description">Ingrese sus datos personales básicos.</p>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group form-group--full">
+                            <label class="form-label">
+                                <span class="material-icons-outlined form-label__icon">groups</span>
+                                ¿Es miembro de la Iglesia de Echaurren o es visita? <span class="required">*</span>
+                            </label>
+                            <div class="toggle-group">
+                                <button type="button" class="toggle-btn toggle-btn--wide" id="tipoMiembro" onclick="toggleTipoAsistente('MIEMBRO')">
+                                    <span class="material-icons-outlined">church</span> Miembro
+                                </button>
+                                <button type="button" class="toggle-btn toggle-btn--wide" id="tipoVisita" onclick="toggleTipoAsistente('VISITA')">
+                                    <span class="material-icons-outlined">person_add</span> Visita
+                                </button>
+                            </div>
+                            <input type="hidden" id="tipoAsistente" name="tipoAsistente" value="">
+                            <span class="form-error" id="tipoAsistenteError">Por favor indique si es miembro o visita</span>
+                        </div>
+
+                        <!-- Campos que aparecen después de seleccionar tipo -->
+                        <div class="form-group--conditional-fields" id="step1Fields" style="display: none;">
+                            <!-- Campo condicional: Iglesia de origen (solo visitas) -->
+                            <div class="form-group form-group--full visita-container" id="iglesiaOrigenContainer" style="display: none;">
+                                <label for="iglesiaOrigen" class="form-label">
+                                    <span class="material-icons-outlined form-label__icon">meeting_room</span>
+                                    ¿Viene de otra iglesia? <span class="form-hint--inline">(opcional)</span>
+                                </label>
+                                <input type="text" id="iglesiaOrigen" name="iglesiaOrigen" class="form-input" 
+                                       placeholder="Ej: Iglesia Bautista de Santiago">
+                            </div>
+                            <div class="form-group">
+                                <label for="nombre" class="form-label">
+                                    <span class="material-icons-outlined form-label__icon">badge</span>
+                                    Nombre <span class="required">*</span>
+                                </label>
+                                <input type="text" id="nombre" name="nombre" class="form-input" 
+                                       placeholder="Ej: Juan" required autocomplete="given-name">
+                                <span class="form-error" id="nombreError">Por favor ingrese su nombre</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="apellido" class="form-label">
+                                    <span class="material-icons-outlined form-label__icon">badge</span>
+                                    Apellido <span class="required">*</span>
+                                </label>
+                                <input type="text" id="apellido" name="apellido" class="form-input" 
+                                       placeholder="Ej: Pérez" required autocomplete="family-name">
+                                <span class="form-error" id="apellidoError">Por favor ingrese su apellido</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="fechaNacimiento" class="form-label">
+                                    <span class="material-icons-outlined form-label__icon">calendar_today</span>
+                                    Fecha de Nacimiento <span class="required">*</span>
+                                </label>
+                                <input type="date" id="fechaNacimiento" name="fechaNacimiento" class="form-input" 
+                                       required max="">
+                                <span class="form-error" id="fechaNacimientoError">Por favor seleccione su fecha de nacimiento</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="estadoCivil" class="form-label">
+                                    <span class="material-icons-outlined form-label__icon">favorite</span>
+                                    Estado Civil <span class="required">*</span>
+                                </label>
+                                <div class="select-wrapper">
+                                    <select id="estadoCivil" name="estadoCivil" class="form-select" required>
+                                        <option value="" disabled selected>Seleccione una opción</option>
+                                        <option value="SOLTERO">Soltero/a</option>
+                                        <option value="CASADO">Casado/a</option>
+                                        <option value="DIVORCIADO">Divorciado/a</option>
+                                        <option value="VIUDO">Viudo/a</option>
+                                    </select>
+                                    <span class="material-icons-outlined select-arrow">expand_more</span>
+                                </div>
+                                <span class="form-error" id="estadoCivilError">Por favor seleccione su estado civil</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <div></div>
+                        <button type="button" class="btn btn--primary" onclick="nextStep(2)">
+                            Siguiente
+                            <span class="material-icons-outlined">arrow_forward</span>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Step 2: Contacto y Familia -->
+                <section class="form-step" id="step2">
+                    <div class="form-step__header">
+                        <h2 class="form-step__title">Contacto y Familia</h2>
+                        <p class="form-step__description">Ingrese su información de contacto y datos familiares.</p>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group form-group--full">
+                            <label for="direccion" class="form-label">
+                                <span class="material-icons-outlined form-label__icon">home</span>
+                                Dirección <span class="required">*</span>
+                            </label>
+                            <input type="text" id="direccion" name="direccion" class="form-input" 
+                                   placeholder="Ej: Calle Echaurren 80" required autocomplete="street-address">
+                            <span class="form-error" id="direccionError">Por favor ingrese su dirección</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="comuna" class="form-label">
+                                <span class="material-icons-outlined form-label__icon">location_on</span>
+                                Comuna <span class="required">*</span>
+                            </label>
+                            <div class="select-wrapper">
+                                <select id="comuna" name="comuna" class="form-select" required>
+                                    <option value="" disabled selected>Seleccione una comuna</option>
+                                    <option value="Santiago">Santiago</option>
+                                    <option value="Providencia">Providencia</option>
+                                    <option value="Las Condes">Las Condes</option>
+                                    <option value="Ñuñoa">Ñuñoa</option>
+                                    <option value="Macul">Macul</option>
+                                    <option value="La Florida">La Florida</option>
+                                    <option value="Puente Alto">Puente Alto</option>
+                                    <option value="Maipú">Maipú</option>
+                                    <option value="San Bernardo">San Bernardo</option>
+                                    <option value="La Granja">La Granja</option>
+                                    <option value="San Ramón">San Ramón</option>
+                                    <option value="La Pintana">La Pintana</option>
+                                    <option value="El Bosque">El Bosque</option>
+                                    <option value="San Miguel">San Miguel</option>
+                                    <option value="La Cisterna">La Cisterna</option>
+                                    <option value="Pedro Aguirre Cerda">Pedro Aguirre Cerda</option>
+                                    <option value="Lo Espejo">Lo Espejo</option>
+                                    <option value="Cerrillos">Cerrillos</option>
+                                    <option value="Estación Central">Estación Central</option>
+                                    <option value="Quinta Normal">Quinta Normal</option>
+                                    <option value="Lo Prado">Lo Prado</option>
+                                    <option value="Pudahuel">Pudahuel</option>
+                                    <option value="Cerro Navia">Cerro Navia</option>
+                                    <option value="Renca">Renca</option>
+                                    <option value="Quilicura">Quilicura</option>
+                                    <option value="Independencia">Independencia</option>
+                                    <option value="Recoleta">Recoleta</option>
+                                    <option value="Conchalí">Conchalí</option>
+                                    <option value="Huechuraba">Huechuraba</option>
+                                    <option value="Vitacura">Vitacura</option>
+                                    <option value="Lo Barnechea">Lo Barnechea</option>
+                                    <option value="La Reina">La Reina</option>
+                                    <option value="Peñalolén">Peñalolén</option>
+                                    <option value="San Joaquín">San Joaquín</option>
+                                    <option value="Otra">Otra</option>
+                                </select>
+                                <span class="material-icons-outlined select-arrow">expand_more</span>
+                            </div>
+                            <span class="form-error" id="comunaError">Por favor seleccione su comuna</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="profesion" class="form-label">
+                                <span class="material-icons-outlined form-label__icon">work</span>
+                                Profesión / Ocupación
+                            </label>
+                            <input type="text" id="profesion" name="profesion" class="form-input" 
+                                   placeholder="Ej: Ingeniero, Estudiante, Dueña de casa">
+                        </div>
+
+                        <!-- Teléfono con código de país -->
+                        <div class="form-group">
+                            <label for="telefono" class="form-label">
+                                <span class="material-icons-outlined form-label__icon">phone</span>
+                                Teléfono
+                            </label>
+                            <div class="phone-input-group">
+                                <select id="codigoPais" class="phone-code-select">
+                                    <option value="+56">🇨🇱 +56</option>
+                                    <option value="+54">🇦🇷 +54</option>
+                                    <option value="+591">🇧🇴 +591</option>
+                                    <option value="+55">🇧🇷 +55</option>
+                                    <option value="+57">🇨🇴 +57</option>
+                                    <option value="+593">🇪🇨 +593</option>
+                                    <option value="+52">🇲🇽 +52</option>
+                                    <option value="+51">🇵🇪 +51</option>
+                                    <option value="+595">🇵🇾 +595</option>
+                                    <option value="+598">🇺🇾 +598</option>
+                                    <option value="+58">🇻🇪 +58</option>
+                                    <option value="+509">🇭🇹 +509</option>
+                                    <option value="+1">🇺🇸 +1</option>
+                                    <option value="+34">🇪🇸 +34</option>
+                                </select>
+                                <input type="tel" id="telefono" name="telefono" class="form-input phone-number-input"
+                                       placeholder="9 1234 5678">
+                            </div>
+                            <span class="form-error" id="telefonoError">Por favor ingrese un número de teléfono válido</span>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="form-group">
+                            <label for="email" class="form-label">
+                                <span class="material-icons-outlined form-label__icon">email</span>
+                                Correo Electrónico
+                            </label>
+                            <input type="email" id="email" name="email" class="form-input"
+                                   placeholder="ejemplo@correo.com">
+                            <span class="form-error" id="emailError">Por favor ingrese un correo electrónico válido</span>
+                        </div>
+
+                        <div class="form-group form-group--full">
+                            <label class="form-label">
+                                <span class="material-icons-outlined form-label__icon">child_care</span>
+                                ¿Tiene hijos?
+                            </label>
+                            <div class="toggle-group">
+                                <button type="button" class="toggle-btn" id="hijosNo" onclick="toggleHijos(false)">
+                                    <span class="material-icons-outlined">close</span> No
+                                </button>
+                                <button type="button" class="toggle-btn" id="hijosSi" onclick="toggleHijos(true)">
+                                    <span class="material-icons-outlined">check</span> Sí
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Campos dinámicos para hijos -->
+                        <div class="form-group form-group--full hijos-container" id="hijosContainer" style="display: none;">
+                            <label class="form-label">
+                                <span class="material-icons-outlined form-label__icon">group</span>
+                                Nombre de los hijos
+                            </label>
+                            <div id="hijosFields">
+                                <div class="hijo-field">
+                                    <input type="text" name="hijo_1" class="form-input" 
+                                           placeholder="Nombre del hijo/a">
+                                    <button type="button" class="btn-icon btn-icon--remove" onclick="removeHijo(this)" title="Eliminar">
+                                        <span class="material-icons-outlined">remove_circle</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn--outline btn--sm" onclick="addHijo()">
+                                <span class="material-icons-outlined">add_circle</span>
+                                Agregar otro hijo
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn--secondary" onclick="prevStep(1)">
+                            <span class="material-icons-outlined">arrow_back</span>
+                            Anterior
+                        </button>
+                        <button type="button" class="btn btn--primary" onclick="nextStep(3)">
+                            Siguiente
+                            <span class="material-icons-outlined">arrow_forward</span>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Step 3: Vida Espiritual -->
+                <section class="form-step" id="step3">
+                    <div class="form-step__header">
+                        <h2 class="form-step__title">Vida Espiritual</h2>
+                        <p class="form-step__description">Cuéntenos sobre su vida espiritual.</p>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group form-group--full">
+                            <label class="form-label">
+                                <span class="material-icons-outlined form-label__icon">water_drop</span>
+                                ¿Ha sido bautizado/a? <span class="required">*</span>
+                            </label>
+                            <div class="toggle-group">
+                                <button type="button" class="toggle-btn" id="bautizadoNo" onclick="toggleBautizado(false)">
+                                    <span class="material-icons-outlined">close</span> No
+                                </button>
+                                <button type="button" class="toggle-btn" id="bautizadoSi" onclick="toggleBautizado(true)">
+                                    <span class="material-icons-outlined">check</span> Sí
+                                </button>
+                            </div>
+                            <input type="hidden" id="bautizado" name="bautizado" value="">
+                            <span class="form-error" id="bautizadoError">Por favor indique si ha sido bautizado/a</span>
+                        </div>
+
+                        <div class="form-group form-group--full">
+                            <label for="fechaConversion" class="form-label">
+                                <span class="material-icons-outlined form-label__icon">event</span>
+                                Fecha Aproximada de Conversión
+                            </label>
+                            <div class="date-approx-group">
+                                <div class="date-approx-field">
+                                    <label for="mesConversion" class="form-label--small">Mes</label>
+                                    <div class="select-wrapper">
+                                        <select id="mesConversion" name="mesConversion" class="form-select">
+                                            <option value="" disabled selected>Mes</option>
+                                            <option value="01">Enero</option>
+                                            <option value="02">Febrero</option>
+                                            <option value="03">Marzo</option>
+                                            <option value="04">Abril</option>
+                                            <option value="05">Mayo</option>
+                                            <option value="06">Junio</option>
+                                            <option value="07">Julio</option>
+                                            <option value="08">Agosto</option>
+                                            <option value="09">Septiembre</option>
+                                            <option value="10">Octubre</option>
+                                            <option value="11">Noviembre</option>
+                                            <option value="12">Diciembre</option>
+                                        </select>
+                                        <span class="material-icons-outlined select-arrow">expand_more</span>
+                                    </div>
+                                </div>
+                                <div class="date-approx-field">
+                                    <label for="anioConversion" class="form-label--small">Año</label>
+                                    <input type="number" id="anioConversion" name="anioConversion" class="form-input" 
+                                           placeholder="Ej: 2010" min="1950" max="2026">
+                                </div>
+                            </div>
+                            <p class="form-hint">Si no recuerda la fecha exacta, puede indicar solo el año.</p>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn--secondary" onclick="prevStep(2)">
+                            <span class="material-icons-outlined">arrow_back</span>
+                            Anterior
+                        </button>
+                        <button type="button" class="btn btn--primary btn--success" onclick="submitForm()">
+                            <span class="material-icons-outlined">send</span>
+                            Enviar Registro
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Loading State -->
+                <section class="form-step" id="stepLoading">
+                    <div class="loading-container">
+                        <div class="loading-spinner"></div>
+                        <h2 class="loading-title">Enviando registro...</h2>
+                        <p class="loading-message">Por favor espere mientras guardamos sus datos.</p>
+                    </div>
+                </section>
+
+                <!-- Error State -->
+                <section class="form-step" id="stepError">
+                    <div class="error-container">
+                        <div class="error-icon">
+                            <span class="material-icons-outlined">error_outline</span>
+                        </div>
+                        <h2 class="error-title">Error al enviar</h2>
+                        <p class="error-message">No se pudo guardar el registro. Por favor verifique su conexión a internet e intente nuevamente.</p>
+                        <p id="errorDetail" class="error-message" style="display:none; font-size: 0.85rem; color: #b91c1c; margin-top: 8px; background: #fef2f2; padding: 8px 12px; border-radius: 6px; word-break: break-word;"></p>
+                        <div class="error-actions">
+                            <button type="button" class="btn btn--primary" onclick="retrySubmit()">
+                                <span class="material-icons-outlined">refresh</span>
+                                Reintentar
+                            </button>
+                            <button type="button" class="btn btn--secondary" onclick="resetForm()">
+                                <span class="material-icons-outlined">arrow_back</span>
+                                Volver al inicio
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Success Message -->
+                <section class="form-step" id="stepSuccess">
+                    <div class="success-container">
+                        <div class="success-icon">
+                            <span class="material-icons-outlined">check_circle</span>
+                        </div>
+                        <h2 class="success-title">¡Registro Exitoso!</h2>
+                        <p class="success-message">Gracias por registrarte en la Iglesia Cristiana Echaurren 80. Sus datos han sido guardados correctamente.</p>
+                        <button type="button" class="btn btn--primary" onclick="resetForm()">
+                            <span class="material-icons-outlined">refresh</span>
+                            Registrar otra persona
+                        </button>
+                    </div>
+                </section>
+
+            </form>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2026 Iglesia Cristiana Echaurren 80 &mdash; Todos los derechos reservados</p>
+        </footer>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
