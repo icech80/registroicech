@@ -558,6 +558,55 @@ Santiago, Providencia, Las Condes, Ñuñoa, Macul, La Florida, Puente Alto, Maip
 | 2026-02-26 | Divisiones verticales entre columnas en la tabla admin |
 | 2026-02-26 | Documentación técnica completa |
 | 2026-03-05 | Panel admin movido a URL separada (`admin.html`), botón "Admin" eliminado de bienvenida |
+| 2026-03-05 | Repositorio subido a GitHub, deploy con GitHub Pages |
+
+---
+
+## 13. Repositorio y Deploy
+
+### 13.1 Repositorio GitHub
+
+- **URL**: https://github.com/icech80/registroicech
+- **Cuenta**: icech80
+- **Rama principal**: `master`
+- **Visibilidad**: Público
+
+### 13.2 Sitio en Producción (GitHub Pages)
+
+- **URL pública**: https://icech80.github.io/registroicech/
+- **Panel admin**: https://icech80.github.io/registroicech/admin.html
+- **Fuente**: Rama `master`, directorio raíz (`/`)
+
+### 13.3 Archivos Excluidos (`.gitignore`)
+
+```
+Thumbs.db, Desktop.ini, .DS_Store    # Archivos de sistema
+.vscode/                             # Configuración del editor
+github-recovery-codes.txt            # Códigos de recuperación (sensible)
+*.crt                                # Certificados
+*.log                                # Logs
+```
+
+### 13.4 Comandos Git para Futuros Cambios
+
+```bash
+# Ver estado de cambios
+git status
+
+# Agregar todos los cambios
+git add .
+
+# Hacer commit con mensaje descriptivo
+git commit -m "Descripción del cambio"
+
+# Subir cambios a GitHub (se actualiza GitHub Pages automáticamente)
+git push
+
+# Ver historial de commits
+git log --oneline
+```
+
+> **Nota**: Al hacer `git push`, GitHub Pages se actualiza automáticamente en 1-2 minutos.
 | 2026-03-05 | Paso 1: campos aparecen condicionalmente tras seleccionar Miembro/Visita |
 
 ---
